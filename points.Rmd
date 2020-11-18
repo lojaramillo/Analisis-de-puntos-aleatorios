@@ -1,0 +1,81 @@
+---
+title: "Points"
+author: "Lorena Padilla Jaramillo"
+date: "11/17/2020"
+output: html_document
+---
+
+```{r}
+x <- brick("intento.jpg")
+plotRGB(x)
+```
+
+
+
+
+
+```{r}
+library(raster)
+#im <- load.image("intento.jpg")
+#plot(im)
+#density(im)
+x <- raster("intento.jpg")
+x2 <- raster("intento2.jpg")
+plotRGB(x2)
+xyz = rasterToPoints(x)
+xyz2 = rasterToPoints(x2)
+head(xyz2)
+l<-as.matrix(xyz)
+l<-data.frame(l)
+l2<-as.matrix(xyz2)
+l2<-data.frame(l2)
+plot(density(l$x))
+plot(density(l$y))
+plot(density(l$intento))
+plot(density(l2$intento2))
+plot(density(l$intento))
+library(latticeExtra) 
+levelplot(intento ~ x*y,data=l)
+```
+
+```{r}
+library(dplyr)
+ll<-filter(l,intento<50)
+levelplot(intento ~ x*y,data=ll)
+hist(l$intento)
+ll<-filter(l,intento<100)
+hist(ll$intento)
+l2<-data.frame(l2)
+ll2<-filter(l2,intento2<100)
+hist(ll2$intento2)
+```
+
+
+
+
+
+```{r}
+x <- rasterToContour(x)
+plot(x)
+
+```
+
+
+```{r}
+ ggplot() +
+      geom_raster(data =l , 
+              aes(x = x, y = y, 
+                   fill = intento)
+              ) + 
+     scale_fill_gradientn(name = "Elevation", colors = terrain.colors(10)) +
+     theme_bw() +
+     theme(panel.grid.major = element_blank(), 
+           panel.grid.minor = element_blank()) +
+     theme(axis.title.x = element_blank(),
+            axis.title.y = element_blank()) +
+     ggtitle("Plot") +
+     coord_equal()
+```
+
+
+
